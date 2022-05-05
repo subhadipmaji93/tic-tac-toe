@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t subhadipmaji93/tic-tac-toe -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true subhadipmaji93/tic-tac-toe npm run test
+
+
+deploy:
+  provider: elasticbeanstalk
+  access_key_id: $ACCESS_KEY_ID
+  secret_access_key:
+    secure: "$SECRET_ACCESS_KEY"
+  region: "ap-south-1"
+  app: "Tic-Tac-Toe"
+  env: "Tictactoe-env-1"
+  bucket_name: "elasticbeanstalk-ap-south-1-014704287475"
+  bucket_path: "Tic-Tac-Toe"
+  on:
+    branch: main
